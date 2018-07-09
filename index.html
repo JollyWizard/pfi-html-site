@@ -23,7 +23,7 @@
         $('th a', html).replaceWith( function () { return this.textContent })
         
         // Remove horizontal rule row
-        $('hr', html).parent('th').remove()
+        $('hr', html).parent('tr').remove()
         
         // Remove empty column
         $('td:first-child, th:first-child', html).remove()
