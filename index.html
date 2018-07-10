@@ -22,8 +22,12 @@
         // Remove table sort links (don't work outside of original document)
         $('th a', html).replaceWith( function () { return this.textContent })
 
-        // Remove horizontal rule row
-        $('hr', html).parent('tr').remove()
+        // Remove horizontal rule row(s)
+        $('hr', html).parents('tr').remove()
+
+        // Create thead and move header cell rows to it.
+        let head = $('<thead />').prependTo( html )
+        $('th', html).parent('tr').appendTo( head )
 
         // Remove empty column
         $('td:first-child, th:first-child', html).remove()
