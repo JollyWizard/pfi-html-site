@@ -8,101 +8,70 @@
     crossorigin="anonymous">
   </script>
 
+  <script src='load-index.js'></script>
+  <script src='load-excerpts.js'></script>
   <script>
-    function fetchIndex(callback) {
-      let dir_url='http://library.pyramidal-foundational-information.com/books/'
-      $.get(dir_url, {
-        crossOrigin : true
-      }, (data) => {
-        let html = $.parseHTML($.trim(data))
 
-        // Convert back to jquery from parsed array (for multiple transforms)
-        html = $(html).filter('table')
+    function setup() {
 
-        // Remove table sort links (don't work outside of original document)
-        $('th a', html).replaceWith( function () { return this.textContent })
+      $('nav a').click(function(event)
+        {
+          event.preventDefault()
+          let target=event.target.hash
+          $('section').filter(target).show()
+          $('section').not(target).hide()
+        }
+      );
 
-        // Remove horizontal rule row(s)
-        $('hr', html).parents('tr').remove()
+      $('a[href="#Library"]').click()
 
-        // Create thead and move header cell rows to it.
-        let head = $('<thead />').prependTo( html )
-        $('th', html).parent('tr').appendTo( head )
-
-        // Remove empty column
-        $('td:first-child, th:first-child', html).remove()
-
-        // Resolve the relative `mod_autoindex` links to the source `dir_url`.
-        $('td a', html)
-          .each( (index, element) => {
-            element = $(element)
-            let relative = element.attr('href')
-
-            element.attr('href', dir_url + '/' + relative)
-          })
-
-        callback( html )
-      }, 'html')
-    }
-
-    $( ()=>{
       fetchIndex( (data)=>{
         $('.index').append( data )
       })
-    })
+
+      fetchExcerpts( (data)=>{
+        $('#Sessions .content').append(data)
+      })
+    }
+
+    $(()=>setup())
   </script>
 
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' />
-
   <style>
-    body {
-      background: url('background.jpg');
+    section {
+      display:none;
     }
 
-    .banner img {
-      width: calc(100%);
-      max-height: 20vmax;
-    }
-
-    .wrapper {
-      position:relative;
-    }
-
-    table {
-      margin: 1rem auto;
-      padding:.5rem;
-      color: blanchedalmond;
-      font-weight: bolder;
-      font-size: 1.25rem;
-      font-family: courier;
-      text-shadow: .1em .1em black;
-    }
-
-    table th {
-      font-size:3rem;
-    }
-
-    table tr {
-      margin-bottom:.5rem;
-      background: rgba(0,0,0,.5);
-    }
-
-    table td , table th {
-      padding:.5rem;
-    }
-
-    table a, a:visited {
-      color: inherit;
-      text-decoration:none;
+    section:target {
+      display:block;
     }
   </style>
 
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' />
+
+  <link rel='stylesheet' href='styles.css' />
+
 </head>
 <body>
-  <div class='wrapper'>
-    <div class='banner'><img src='banner.jpg' /></div>
-  </div>
-  <div class='index'>
+  <div class='page-wrapper'>
+
+    <header class='banner wrapper'>
+      <span class='site-title'>Pyramidal Foundational Information</span>
+      <img src='banner.jpg' />
+      <nav>
+        <a href='#Library'>Library</a>
+        <a href='#Sessions'>Sessions</a>
+      </nav>
+    </header>
+
+    <section id="Library">
+      <div class='index embossed'></div>
+    </section>
+
+    <section id="Sessions">
+      <div class='content embossed'>
+      </div>
+    </section>
   </div>
 </body>
 </html>
