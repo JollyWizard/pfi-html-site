@@ -6,6 +6,7 @@ function fetchExcerpts(callback) {
 
     /* Trim out replacement character � */
     data = data.replace(/\uFFFD/g, '')
+
     let html = $.parseHTML($.trim(data))
 
     // Convert back to jquery from parsed array (for multiple transforms)
@@ -15,7 +16,11 @@ function fetchExcerpts(callback) {
 
     $('*[style] , *[class]', html).removeAttr('style').removeAttr('class')
 
-    $(':contains(Session)', html).before('<hr />')
+    $('p:contains(Session)', html)
+      .css('filter', 'hue-rotate(90deg)')
+      .before('<hr />')
+
+    $('p:contains(Q:)', html).css('filter','hue-rotate(180deg)')
 
     callback( html )
   }, 'html')
