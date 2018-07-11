@@ -25,6 +25,10 @@ function fetchIndex(callback) {
     $('td a', html)
       .each( (index, element) => {
         element = $(element)
+
+        /* Open in new tab */
+        element.attr('target', '_blank')
+
         let relative = element.attr('href')
 
         element.attr('href', dir_url + '/' + relative)
