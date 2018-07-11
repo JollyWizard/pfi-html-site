@@ -34,16 +34,16 @@
 
       $('nav a').click(function(event)
         {
-          /* Prevent navigation action (to prevent scroll jump). */
+          // Prevent navigation action (to prevent scroll jump).
           event.preventDefault()
 
-          /* Get url has from event generating link. */
+          // Get url hash from event generating link.
           let target=event.target.hash
 
-          /* Use the history api to change url bar. */
+          // Use the history api to change url bar.
           history.pushState({},target,target)
 
-          /* Render visibility changes. */
+          // Render visibility changes.
           sectionFilter()
         }
       );
@@ -58,7 +58,7 @@
 
       sectionFilter()
     }
-    
+
     $(setup)
   </script>
 
