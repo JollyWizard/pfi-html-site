@@ -23,6 +23,9 @@ function fetchExcerpts(callback) {
     html.filter('p:contains(Session)')
       .addClass('session-id')
 
+    html.filter('p:contains(Q:)')
+      .addClass('question')
+    
     html = html.filter('.session-id')
       .map( function (index, element) {
         const group = $(element).nextUntil('.session-id').addBack()
@@ -30,9 +33,6 @@ function fetchExcerpts(callback) {
         wrapper.append(group)
         return wrapper.get()
       })
-
-    html.filter('p:contains(Q:)')
-      .addClass('question')
 
     callback( html )
   }, 'html')
