@@ -12,18 +12,41 @@
   <script src='load-excerpts.js'></script>
   <script>
 
+    /**
+      Section to use if none is selected.
+    */
+    const defaultSection = '#Library'
+
+    /**
+      Show the section identified by the `location.hash` or default, and hide
+      the other sections.
+    */
+    function sectionFilter()
+    {
+      let target = window.location.hash
+      target = !!target ? target : defaultSection
+      $('section').filter(target).show()
+      $('section').not(target).hide()
+    }
+
     function setup() {
+      $(window).on('popstate', sectionFilter)
 
       $('nav a').click(function(event)
         {
+          /* Prevent navigation action (to prevent scroll jump). */
           event.preventDefault()
+
+          /* Get url has from event generating link. */
           let target=event.target.hash
-          $('section').filter(target).show()
-          $('section').not(target).hide()
+
+          /* Use the history api to change url bar. */
+          history.pushState({},target,target)
+
+          /* Render visibility changes. */
+          sectionFilter()
         }
       );
-
-      $('a[href="#Library"]').click()
 
       fetchIndex( (data)=>{
         $('.index').append( data )
@@ -32,9 +55,11 @@
       fetchExcerpts( (data)=>{
         $('#Sessions .content').append(data)
       })
-    }
 
-    $(()=>setup())
+      sectionFilter()
+    }
+    
+    $(setup)
   </script>
 
   <style>
