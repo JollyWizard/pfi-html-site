@@ -12,15 +12,27 @@ function fetchExcerpts(callback) {
     // Convert back to jquery from parsed array (for multiple transforms)
     html = $(html)
 
-    $('h1', html).remove()
+    //Unwrap from Word export wrapper elements.
+    html = html.filter('div').children('p')
 
-    $('*[style] , *[class]', html).removeAttr('style').removeAttr('class')
+    // Remove Word css styling
+    html.children().addBack().filter('[class]').removeAttr('class')
+    html.find('span').replaceWith(function() { return this.innerHTML })
+    html.find('[style]').removeAttr('style')
 
-    $('p:contains(Session)', html)
-      .css('filter', 'hue-rotate(90deg)')
-      .before('<hr />')
+    html.filter('p:contains(Session)')
+      .addClass('session-id')
 
-    $('p:contains(Q:)', html).css('filter','hue-rotate(180deg)')
+    html = html.filter('.session-id')
+      .map( function (index, element) {
+        const group = $(element).nextUntil('.session-id').addBack()
+        const wrapper = $('<div />', {class: 'excerpt'})
+        wrapper.append(group)
+        return wrapper.get()
+      })
+
+    html.filter('p:contains(Q:)')
+      .addClass('question')
 
     callback( html )
   }, 'html')

@@ -2,6 +2,12 @@ body {
   background: url('background.jpg');
   font-family:courier;
   font-weight: bolder;
+
+  /*
+    Because content will always require scroll.
+    Prevents scrollbar activated resize.
+    */
+  overflow-y:scroll;
 }
 
 .page-wrapper {
@@ -103,15 +109,29 @@ table a, a:visited {
 
 #Sessions .content
 {
-  background:rgba(0,0,0,.5);
-  padding: 1rem 3rem;
   font-size: 1.5rem;
   letter-spacing: .25rem;
   line-height:1.5em;
-  margin:1em;
 }
 
 #Sessions .content p
 {
   margin-botton:1em;
+}
+
+.excerpt
+{
+  background:rgba(0,0,0,.5);
+  margin: 1rem;
+  padding: 1em 3em;
+}
+
+.session-id
+{
+  filter: hue-rotate(90deg)
+}
+
+.question
+{
+  filter: hue-rotate(180deg)
 }
