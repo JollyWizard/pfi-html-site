@@ -12,27 +12,8 @@ function fetchExcerpts(callback) {
     // Convert back to jquery from parsed array (for multiple transforms)
     html = $(html)
 
-    //Unwrap from Word export wrapper elements.
-    html = html.filter('div').children('p')
-
-    // Remove Word css styling
-    html.children().addBack().filter('[class]').removeAttr('class')
-    html.find('span').replaceWith(function() { return this.innerHTML })
-    html.find('[style]').removeAttr('style')
-
-    html.filter('p:contains(Session)')
-      .addClass('session-id')
-
-    html.filter('p:contains(Q:)')
-      .addClass('question')
-    
-    html = html.filter('.session-id')
-      .map( function (index, element) {
-        const group = $(element).nextUntil('.session-id').addBack()
-        const wrapper = $('<div />', {class: 'excerpt'})
-        wrapper.append(group)
-        return wrapper.get()
-      })
+    //Unwrap preprocessed sections.
+    html = html.filter('.excerpt')
 
     callback( html )
   }, 'html')
